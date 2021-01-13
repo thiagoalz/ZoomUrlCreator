@@ -70,7 +70,7 @@
 			if(strPassword){
 				//Copia a senha para o clipboard				
 				copyToClipboard(strPassword);
-				console.log("pass: "+strPassword);								
+				console.log("Pass: "+strPassword);								
 			}
 			
 			console.log("Url: "+url);
@@ -159,71 +159,73 @@
 	//Casos de Teste
 	function TestConverteSalaZoom(){
 		try {
-			if(converteSalaZoom("12345") !== "https://zoom.us/j/12345") throw new Error("Falhou no teste");
+			executaTesteSala("12345","https://zoom.us/j/12345");
 			
-			if(converteSalaZoom("zoom 12345") !== "https://zoom.us/j/12345") throw new Error("Falhou no teste");
+			executaTesteSala("zoom 12345","https://zoom.us/j/12345");
 			
-			if(converteSalaZoom("zoom: 12345;") !== "https://zoom.us/j/12345") throw new Error("Falhou no teste");
+			executaTesteSala("zoom: 12345;","https://zoom.us/j/12345");
 			
-			if(converteSalaZoom("alz") !== "https://zoom.us/my/alz") throw new Error("Falhou no teste");
+			executaTesteSala("alz","https://zoom.us/my/alz");
 
-			if(converteSalaZoom("alz;") !== "https://zoom.us/my/alz") throw new Error("Falhou no teste");	
+			executaTesteSala("alz;","https://zoom.us/my/alz");	
 			
-			if(converteSalaZoom("zoom alz") !== "https://zoom.us/my/alz") throw new Error("Falhou no teste");
+			executaTesteSala("zoom alz","https://zoom.us/my/alz");
 			
-			if(converteSalaZoom("zoom: alz;") !== "https://zoom.us/my/alz") throw new Error("Falhou no teste");
+			executaTesteSala("zoom: alz;","https://zoom.us/my/alz");
 			
-			if(converteSalaZoom("thiago.alz") !== "https://zoom.us/my/thiago.alz") throw new Error("Falhou no teste");
+			executaTesteSala("thiago.alz","https://zoom.us/my/thiago.alz");
 
-			if(converteSalaZoom("thiago.alz;") !== "https://zoom.us/my/thiago.alz") throw new Error("Falhou no teste");
+			executaTesteSala("thiago.alz;","https://zoom.us/my/thiago.alz");
 			
-			if(converteSalaZoom("zoom thiago.alz") !== "https://zoom.us/my/thiago.alz") throw new Error("Falhou no teste");
+			executaTesteSala("zoom thiago.alz","https://zoom.us/my/thiago.alz");
 			
-			if(converteSalaZoom("zoom: thiago.alz;") !== "https://zoom.us/my/thiago.alz") throw new Error("Falhou no teste");
+			executaTesteSala("zoom: thiago.alz;","https://zoom.us/my/thiago.alz");
 			
-			if(converteSalaZoom("Zoom  5686857063 Password 113397;") !== "https://zoom.us/j/5686857063") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");
+			executaTesteSala("Zoom  5686857063 Password 12345;","https://zoom.us/j/5686857063","12345");
 			
-			if(converteSalaZoom("Zoom:  5686857063 Password: 113397;") !== "https://zoom.us/j/5686857063") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");
+			executaTesteSala("Zoom:  5686857063 Password: 12346;","https://zoom.us/j/5686857063","12346");
 			
-			if(converteSalaZoom("Zoom:  thiago Password: 113397;") !== "https://zoom.us/my/thiago") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");
+			executaTesteSala("Zoom:  thiago Password: 12347;","https://zoom.us/my/thiago","12347");
 			
-			if(converteSalaZoom("Zoom:  thiago.alz Password: 113397;") !== "https://zoom.us/my/thiago.alz") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");
+			executaTesteSala("Zoom:  thiago.alz Password: 12348;","https://zoom.us/my/thiago.alz","12348");
 			
-			if(converteSalaZoom("Zoom:thiago Password:113397;") !== "https://zoom.us/my/thiago") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");
+			executaTesteSala("Zoom:thiago Password:12349;","https://zoom.us/my/thiago","12349");
 			
-			if(converteSalaZoom("thiago.alz Password:113397;") !== "https://zoom.us/my/thiago.alz") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");
+			executaTesteSala("thiago.alz Password:12350;","https://zoom.us/my/thiago.alz","12350");
 			
-			if(converteSalaZoom("https://zoom.us/my/umasalaai") !== "https://zoom.us/my/umasalaai") throw new Error("Falhou no teste");
+			executaTesteSala("https://zoom.us/my/umasalaai","https://zoom.us/my/umasalaai");
 			
-			if(converteSalaZoom("https://zoom.us/j/123456") !== "https://zoom.us/j/123456") throw new Error("Falhou no teste");
+			executaTesteSala("https://zoom.us/j/123456","https://zoom.us/j/123456");
 			
-			if(converteSalaZoom("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09") !== "https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09") throw new Error("Falhou no teste");
+			executaTesteSala("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09","https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09");
 			
-			if(converteSalaZoom("entra ai: https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 nesse link") !== "https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09") throw new Error("Falhou no teste");
+			executaTesteSala("entra ai: https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 nesse link","https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09");
 			
-			if(converteSalaZoom("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 Password 113397") !== "https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");
+			executaTesteSala("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 Password 12351","https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09","12351");
 
-			if(converteSalaZoom("https://zoom.us/my/umasalaai Password 113397") !== "https://zoom.us/my/umasalaai") throw new Error("Falhou no teste");
-			if(pasteFromClipboard() !== "113397") throw new Error("Falhou no teste");			
+			executaTesteSala("https://zoom.us/my/umasalaai Password 12352","https://zoom.us/my/umasalaai","12352");			
 			
 			document.getElementById("divSucesso").style.opacity = "1";
 			document.getElementById("tests").innerHTML = "Testes Concluidos :)"
 		}catch(err) {
 			document.getElementById("divFail").style.opacity = "1";
-			document.getElementById("tests").innerHTML = "<strong>"+err.name + "</strong><br>" + err.message;
-			document.getElementById("tests").innerHTML += "<br><br><strong>Stack</strong><p>"+err.stack+"</p>";
-			//document.getElementById("tests").innerHTML += "<p><strong>Linha</strong></p><p>"+err.lineNumber+"</p>";
+			document.getElementById("tests").innerHTML += "<br><br><strong>Error</strong><br>"+err.stack;			
 		}
-		//Devolvendo Foco para campo principal
-		document.getElementById("roomText").focus();
+		
+		//Ajustando campos pós testes
 		document.getElementById("roomPassword").value = "";
+		document.getElementById("roomPassword").readonly = "true";
+		document.getElementById("roomText").focus();
+	}
+	
+	function executaTesteSala(entrada, salaEsperada, senhaEsperada){
+		var saidaSala = converteSalaZoom(entrada);
+		var saidaSenha;
+		if(senhaEsperada) saidaSenha = pasteFromClipboard();
+		
+		if((salaEsperada !== saidaSala) || (senhaEsperada !== saidaSenha)){
+			throw new Error("Falhou no teste<br> Entrada: '"+entrada+"'<br> Sala: '"+saidaSala+"' [Esperado '"+salaEsperada+"']<br> Senha: '"+saidaSenha+"' [Esperado '"+senhaEsperada+"']<br>-----");
+		}		
 	}
 </script>
 
@@ -235,7 +237,7 @@
 <p>Password is going to be copied to clipboard</p>
 <input type="text" value="" id="roomPassword" readonly>
 </p>
-<h2 id="TitleTests">Testes</h2>
+<h2 id="TitleTests">Tests</h2>
 <button id="test" onclick="TestConverteSalaZoom()">Run Tests</button>
 <div id="divFail" class="alert">
   <span class="closebtn">&times;</span>  
@@ -245,7 +247,8 @@
   <span class="closebtn">&times;</span>  
   <strong>Success!</strong> Todos os testes passaram.
 </div>
-<p id="tests" style="color:red"></p>
+<span id="tests" style="white-space: pre-line; color:red"></span>
+
 
 <script>
 	//So dar enter depois de colar o texto
