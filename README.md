@@ -1,5 +1,5 @@
 # ZoomUrlCreator
-Simple webpage that converts crazy strings users uso de send to meetings into direct zoom URLs
+Simple webpage that converts crazy strings that co-workers use to send to meetings, into direct zoom URLs.
 
 # How to use
  * Download and open ZoomURL.html
