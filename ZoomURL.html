@@ -55,15 +55,15 @@
 		}
 	</style>
 
-	<script type="text/javascript">
-			//Ainda nao sei porque, a funcao de copiar a senha nao funciona quando executo a funcao direto no onLoad
+	<script type="text/javascript">			
 			//Verificar se algum parametro de sala foi enviado na URL
 			function salaZoomUrlParameter(){
 				var queryString = window.location.search;				
 				if(queryString){
 					queryString = decodeURI(queryString.substring(1));
-					//salaZoom(queryString);
 					document.getElementById("roomText").value = queryString;
+					//salaZoom(queryString);					
+					//setTimeout(function(){document.getElementById("myBtn").click();}, 5000);					
 				}
 			
 			}
@@ -279,14 +279,13 @@
     <div class="navbar navbar-inverse navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="">RoomUL</a>
+          <a class="navbar-brand" href="index.html">RoomUL</a>
         </div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-			  <li><a href="work.html">Work</a></li>
 			  <li><a href="about.html">About</a></li>
-			  <li><a href="blog.html">Blog</a></li>
-			  <li><a href="contact.html">Contact</a></li>
+			  <li><a href="license.html">License</a></li>
+			  <li><a href="https://github.com/thiagoalz/ZoomUrlCreator">Contact</a></li>
 			</ul>
       </div>
       </div>
@@ -329,13 +328,12 @@
 	</div><!-- /container -->
 	
 	
-	<!-- +++++ Footer Section +++++ -->
-	
+	<!-- +++++ Footer Section +++++ -->	
 	<div id="footer">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-4">
-					<span onclick="document.getElementById('divTestes').style.display='inline'">Tests</span>
+					<!--<span onclick="document.getElementById('divTestes').style.display='inline'">Tests</span>-->
 					<!--<h4>My Bunker</h4>
 					<p>
 						Some Address 987,<br/>
@@ -344,16 +342,15 @@
 					</p>
 				</div><!-- /col-lg-4 -->
 				
-				<!--<div class="col-lg-4">
-					<h4>My Links</h4>
+				<div class="col-lg-4">
+					<h4>Links</h4>
 					<p>
-						<a href="#">Dribbble</a><br/>
-						<a href="#">Twitter</a><br/>
-						<a href="#">Facebook</a>
+						<a href="https://github.com/thiagoalz/ZoomUrlCreator">GitHub</a><br/>
+						<a href="https://github.com/thiagoalz/ZoomUrlCreator/blob/main/LICENSE">License</a>
 					</p>
 				</div><!-- /col-lg-4 -->
 				
-				<!--<div class="col-lg-4">
+				<div class="col-lg-4">
 					<h4>About</h4>
 					<p>Zoom Room URL Generator</p>
 				</div><!-- /col-lg-4 -->
