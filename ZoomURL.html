@@ -1,275 +1,364 @@
- <head>
- <title>Zoom Url</title>
- <link rel="shortcut icon" href="https://d24cgw3uvb9a9h.cloudfront.net/zoom.ico" />
- <style>
-.alert {
-  padding: 20px;
-  background-color: #f44336;
-  color: white;
-  opacity: 0;
-  transition: opacity 0.6s;
-  margin-bottom: 15px;
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-DT0CF4ESBX"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
 
-.alert.success {background-color: #4CAF50;}
-.alert.info {background-color: #2196F3;}
-.alert.warning {background-color: #ff9800;}
+	  gtag('config', 'G-DT0CF4ESBX');
+	</script>
 
-.closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="https://d24cgw3uvb9a9h.cloudfront.net/zoom.ico" />
 
-.closebtn:hover {
-  color: black;
-}
-</style>
+    <title>RoomUL</title>
 
- <script type="text/javascript">
-        function salaZoom(){
-			//var StringZoom = window.prompt("Sala do zoom?","");
-			var StringZoom = document.getElementById("roomText").value;
-			
-			url = converteSalaZoom(StringZoom);
-			
-			window.location.replace(url);	
-        }
-		
-		function converteSalaZoom(StringZoom){
-			console.log("String: "+StringZoom);
-			
-			//Verificando se tem URL pronta
-			var url = buscaUrl(StringZoom);
-			if(url){
-				StringZoom = StringZoom.replace(url,''); //Remove URL do texto inicial
-			}			
-			StringZoom = trataTexto(StringZoom);
-			
-			//Buscando a Sala
-			var StringSala = url;
-			if (!url){//Nao tem URL pronta, buscar sala
-				StringSala = buscaSala(StringZoom);
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="assets/css/main.css" rel="stylesheet">
+	<!-- Base template: https://www.free-css.com/free-css-templates/page202/stanley -->
+	
+	<style>
+		.alert {
+		  padding: 20px;
+		  background-color: #f44336;
+		  color: white;
+		  opacity: 0;
+		  transition: opacity 0.6s;
+		  margin-bottom: 15px;
+		}
+
+		.alert.success {background-color: #4CAF50;}
+		.alert.info {background-color: #2196F3;}
+		.alert.warning {background-color: #ff9800;}
+
+		.closebtn {
+		  margin-left: 15px;
+		  color: white;
+		  font-weight: bold;
+		  float: right;
+		  font-size: 22px;
+		  line-height: 20px;
+		  cursor: pointer;
+		  transition: 0.3s;
+		}
+
+		.closebtn:hover {
+		  color: black;
+		}
+	</style>
+
+	<script type="text/javascript">
+			function salaZoom(){
+				//var StringZoom = window.prompt("Sala do zoom?","");
+				var StringZoom = document.getElementById("roomText").value;
 				
-				if(isNaN(StringSala)){
-					url = "https://zoom.us/my/".concat(StringSala);
-				}else{
-					url = "https://zoom.us/j/".concat(StringSala);
+				url = converteSalaZoom(StringZoom);
+				
+				window.location.replace(url);	
+			}
+			
+			function converteSalaZoom(StringZoom){
+				console.log("String: "+StringZoom);
+				
+				//Verificando se tem URL pronta
+				var url = buscaUrl(StringZoom);
+				if(url){
+					StringZoom = StringZoom.replace(url,''); //Remove URL do texto inicial
+				}			
+				StringZoom = trataTexto(StringZoom);
+				
+				//Buscando a Sala
+				var StringSala = url;
+				if (!url){//Nao tem URL pronta, buscar sala
+					StringSala = buscaSala(StringZoom);
+					
+					if(isNaN(StringSala)){
+						url = "https://zoom.us/my/".concat(StringSala);
+					}else{
+						url = "https://zoom.us/j/".concat(StringSala);
+					}
+				}			
+				console.log("Sala: "+StringSala)
+				
+				//Buscando Senha
+				var strPassword = buscaSenha(StringZoom);//Verifica se tem senha para tratar
+				
+				if(strPassword){
+					//Copia a senha para o clipboard				
+					copyToClipboard(strPassword);
+					console.log("Pass: "+strPassword);								
 				}
-			}			
-			console.log("Sala: "+StringSala)
-			
-			//Buscando Senha
-			var strPassword = buscaSenha(StringZoom);//Verifica se tem senha para tratar
-			
-			if(strPassword){
-				//Copia a senha para o clipboard				
-				copyToClipboard(strPassword);
-				console.log("Pass: "+strPassword);								
+				
+				console.log("Url: "+url);
+				console.log("---");
+				return url;
 			}
 			
-			console.log("Url: "+url);
-			console.log("---");
-			return url;
-		}
-		
-		//Trata o texto para facilitar o reconhecimento no futuro
-		function trataTexto(textoOriginal){
-			//Preparando String
-			textoOriginal = textoOriginal.replace(/;/g, '');
-			textoOriginal = textoOriginal.replace(/:/g, ' ');
-			//textoOriginal = textoOriginal.replace(/[^a-zA-Z0-9-_.]/g, '');
-			//Substituindo possiveis variacoes da palavra senha (inclusindo maiusculas ou nao) por uma palavra unica
-			textoOriginal = textoOriginal.replace(/pwd/ig, 'password')
-			textoOriginal = textoOriginal.replace(/password/ig, 'password')
-			textoOriginal = textoOriginal.replace(/senha/ig, 'password')
-			textoOriginal = textoOriginal.replace(/pass /ig, 'password')
-			//Substituindo possiveis variacoes da sala (inclusindo maiusculas ou nao) por uma palavra unica
-			textoOriginal = textoOriginal.replace(/sala/ig, 'sala')
-			textoOriginal = textoOriginal.replace(/zoom/ig, 'sala')
-			
-			return textoOriginal;
-		}
-		
-		
-		//Busca url pronta no texto
-		function buscaUrl(textoUrl){
-			var url = textoUrl.match(/\bhttps?:\/\/\S+/gi);
-			if(url){
-				url = url[0];
-			}
-			return url;
-		}
-		
-		//Busca sala de zoom no texto
-		function buscaSala(textoSala){
-			var sala;
-			if(textoSala.indexOf("sala")==-1){//Nao tem o token "sala"				
-				sala = textoSala.split(" ").shift();//Pega o primeiro token
-				//sala = textoSala.substring(textoSala.lastIndexOf(" ") + 1); //Pega o ultimo token - O primeiro token funciona em mais casos
-			}else{
-				//Pega o primeiro token logo apos o token "sala"				
-				var arraySala = textoSala.split("sala").pop();
-				arraySala = arraySala.split(" ");
-				arraySala = arraySala.filter(item => item); //Remove espacos em branco
-				sala = arraySala.shift();				
+			//Trata o texto para facilitar o reconhecimento no futuro
+			function trataTexto(textoOriginal){
+				//Preparando String
+				textoOriginal = textoOriginal.replace(/;/g, '');
+				textoOriginal = textoOriginal.replace(/:/g, ' ');
+				//textoOriginal = textoOriginal.replace(/[^a-zA-Z0-9-_.]/g, '');
+				//Substituindo possiveis variacoes da palavra senha (inclusindo maiusculas ou nao) por uma palavra unica
+				textoOriginal = textoOriginal.replace(/pwd/ig, 'password')
+				textoOriginal = textoOriginal.replace(/password/ig, 'password')
+				textoOriginal = textoOriginal.replace(/senha/ig, 'password')
+				textoOriginal = textoOriginal.replace(/pass /ig, 'password')
+				//Substituindo possiveis variacoes da sala (inclusindo maiusculas ou nao) por uma palavra unica
+				textoOriginal = textoOriginal.replace(/sala/ig, 'sala')
+				textoOriginal = textoOriginal.replace(/zoom/ig, 'sala')
+				
+				return textoOriginal;
 			}
 			
-			return sala;
-		}
-		
-		//Busca senha de zoom no texto
-		function buscaSenha(textoSenha){
-			var strPassword;
-			if(textoSenha.indexOf("password")!==-1){
-				//Busca Senha - Pega o primeiro token logo apos o token "password"
-				var arrayPassword = textoSenha.split("password").pop();
-				arrayPassword = arrayPassword.split(" ");
-				arrayPassword = arrayPassword.filter(item => item); //Remove espacos em branco
-				strPassword = arrayPassword.shift();
+			
+			//Busca url pronta no texto
+			function buscaUrl(textoUrl){
+				var url = textoUrl.match(/\bhttps?:\/\/\S+/gi);
+				if(url){
+					url = url[0];
+				}
+				return url;
 			}
 			
-			return strPassword;
+			//Busca sala de zoom no texto
+			function buscaSala(textoSala){
+				var sala;
+				if(textoSala.indexOf("sala")==-1){//Nao tem o token "sala"				
+					sala = textoSala.split(" ").shift();//Pega o primeiro token
+					//sala = textoSala.substring(textoSala.lastIndexOf(" ") + 1); //Pega o ultimo token - O primeiro token funciona em mais casos
+				}else{
+					//Pega o primeiro token logo apos o token "sala"				
+					var arraySala = textoSala.split("sala").pop();
+					arraySala = arraySala.split(" ");
+					arraySala = arraySala.filter(item => item); //Remove espacos em branco
+					sala = arraySala.shift();				
+				}
+				
+				return sala;
+			}
+			
+			//Busca senha de zoom no texto
+			function buscaSenha(textoSenha){
+				var strPassword;
+				if(textoSenha.indexOf("password")!==-1){
+					//Busca Senha - Pega o primeiro token logo apos o token "password"
+					var arrayPassword = textoSenha.split("password").pop();
+					arrayPassword = arrayPassword.split(" ");
+					arrayPassword = arrayPassword.filter(item => item); //Remove espacos em branco
+					strPassword = arrayPassword.shift();
+				}
+				
+				return strPassword;
+			}
+			
+			function copyToClipboard(Stringpassword){
+				var copyText = document.getElementById("roomPassword");
+				copyText.value = Stringpassword;
+				copyText.select();
+				copyText.setSelectionRange(0, 99999)
+				document.execCommand("copy");
+			}
+			
+			function pasteFromClipboard() {
+			  roompassword = document.getElementById("roomPassword");
+			  roompassword.readonly = "false";
+			  roompassword.focus();
+			  document.execCommand("paste");
+			  
+			  return roompassword.value;
+			}
+
+	</script>
+	<script type="text/javascript">
+		//Casos de Teste
+		function TestConverteSalaZoom(){
+			try {
+				executaTesteSala("12345","https://zoom.us/j/12345");
+				
+				executaTesteSala("zoom 12345","https://zoom.us/j/12345");
+				
+				executaTesteSala("zoom: 12345;","https://zoom.us/j/12345");
+				
+				executaTesteSala("alz","https://zoom.us/my/alz");
+
+				executaTesteSala("alz;","https://zoom.us/my/alz");	
+				
+				executaTesteSala("zoom alz","https://zoom.us/my/alz");
+				
+				executaTesteSala("zoom: alz;","https://zoom.us/my/alz");
+				
+				executaTesteSala("thiago.alz","https://zoom.us/my/thiago.alz");
+
+				executaTesteSala("thiago.alz;","https://zoom.us/my/thiago.alz");
+				
+				executaTesteSala("zoom thiago.alz","https://zoom.us/my/thiago.alz");
+				
+				executaTesteSala("zoom: thiago.alz;","https://zoom.us/my/thiago.alz");
+				
+				executaTesteSala("Zoom  5686857063 Password 12345;","https://zoom.us/j/5686857063","12345");
+				
+				executaTesteSala("Zoom:  5686857063 Password: 12346;","https://zoom.us/j/5686857063","12346");
+				
+				executaTesteSala("Zoom:  thiago Password: 12347;","https://zoom.us/my/thiago","12347");
+				
+				executaTesteSala("Zoom:  thiago.alz Password: 12348;","https://zoom.us/my/thiago.alz","12348");
+				
+				executaTesteSala("Zoom:thiago Password:12349;","https://zoom.us/my/thiago","12349");
+				
+				executaTesteSala("thiago.alz Password:12350;","https://zoom.us/my/thiago.alz","12350");
+				
+				executaTesteSala("https://zoom.us/my/umasalaai","https://zoom.us/my/umasalaai");
+				
+				executaTesteSala("https://zoom.us/j/123456","https://zoom.us/j/123456");
+				
+				executaTesteSala("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09","https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09");
+				
+				executaTesteSala("entra ai: https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 nesse link","https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09");
+				
+				executaTesteSala("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 Password 12351","https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09","12351");
+
+				executaTesteSala("https://zoom.us/my/umasalaai Password 12352","https://zoom.us/my/umasalaai","12352");			
+				
+				document.getElementById("divSucesso").style.opacity = "1";
+				document.getElementById("tests").innerHTML = "Testes Concluidos :)"
+			}catch(err) {
+				document.getElementById("divFail").style.opacity = "1";
+				document.getElementById("tests").innerHTML += "<br><br><strong>Error</strong><br>"+err.stack;			
+			}
+			
+			//Ajustando campos pós testes
+			document.getElementById("roomPassword").value = "";
+			document.getElementById("roomPassword").readonly = "true";
+			document.getElementById("roomText").focus();
 		}
 		
-		function copyToClipboard(Stringpassword){
-			var copyText = document.getElementById("roomPassword");
-			copyText.value = Stringpassword;
-			copyText.select();
-			copyText.setSelectionRange(0, 99999)
-			document.execCommand("copy");
+		function executaTesteSala(entrada, salaEsperada, senhaEsperada){
+			var saidaSala = converteSalaZoom(entrada);
+			var saidaSenha;
+			if(senhaEsperada) saidaSenha = pasteFromClipboard();
+			
+			if((salaEsperada !== saidaSala) || (senhaEsperada !== saidaSenha)){
+				throw new Error("Falhou no teste<br> Entrada: '"+entrada+"'<br> Sala: '"+saidaSala+"' [Esperado '"+salaEsperada+"']<br> Senha: '"+saidaSenha+"' [Esperado '"+senhaEsperada+"']<br>-----");
+			}		
 		}
-		
-		function pasteFromClipboard() {
-		  roompassword = document.getElementById("roomPassword");
-		  roompassword.readonly = "false";
-		  roompassword.focus();
-		  document.execCommand("paste");
-		  
-		  return roompassword.value;
-		}
+	</script>
 
-</script>
- <script type="text/javascript">
-	//Casos de Teste
-	function TestConverteSalaZoom(){
-		try {
-			executaTesteSala("12345","https://zoom.us/j/12345");
-			
-			executaTesteSala("zoom 12345","https://zoom.us/j/12345");
-			
-			executaTesteSala("zoom: 12345;","https://zoom.us/j/12345");
-			
-			executaTesteSala("alz","https://zoom.us/my/alz");
+	<script data-ad-client="ca-pub-4603774665706124" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  </head>
 
-			executaTesteSala("alz;","https://zoom.us/my/alz");	
-			
-			executaTesteSala("zoom alz","https://zoom.us/my/alz");
-			
-			executaTesteSala("zoom: alz;","https://zoom.us/my/alz");
-			
-			executaTesteSala("thiago.alz","https://zoom.us/my/thiago.alz");
+  <body>
 
-			executaTesteSala("thiago.alz;","https://zoom.us/my/thiago.alz");
-			
-			executaTesteSala("zoom thiago.alz","https://zoom.us/my/thiago.alz");
-			
-			executaTesteSala("zoom: thiago.alz;","https://zoom.us/my/thiago.alz");
-			
-			executaTesteSala("Zoom  5686857063 Password 12345;","https://zoom.us/j/5686857063","12345");
-			
-			executaTesteSala("Zoom:  5686857063 Password: 12346;","https://zoom.us/j/5686857063","12346");
-			
-			executaTesteSala("Zoom:  thiago Password: 12347;","https://zoom.us/my/thiago","12347");
-			
-			executaTesteSala("Zoom:  thiago.alz Password: 12348;","https://zoom.us/my/thiago.alz","12348");
-			
-			executaTesteSala("Zoom:thiago Password:12349;","https://zoom.us/my/thiago","12349");
-			
-			executaTesteSala("thiago.alz Password:12350;","https://zoom.us/my/thiago.alz","12350");
-			
-			executaTesteSala("https://zoom.us/my/umasalaai","https://zoom.us/my/umasalaai");
-			
-			executaTesteSala("https://zoom.us/j/123456","https://zoom.us/j/123456");
-			
-			executaTesteSala("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09","https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09");
-			
-			executaTesteSala("entra ai: https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 nesse link","https://zoom.us/j/123456?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09");
-			
-			executaTesteSala("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 Password 12351","https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09","12351");
+    <!-- Static navbar -->
+    <div class="navbar navbar-inverse navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="">RoomUL</a>
+        </div>
+      </div>
+    </div>
 
-			executaTesteSala("https://zoom.us/my/umasalaai Password 12352","https://zoom.us/my/umasalaai","12352");			
-			
-			document.getElementById("divSucesso").style.opacity = "1";
-			document.getElementById("tests").innerHTML = "Testes Concluidos :)"
-		}catch(err) {
-			document.getElementById("divFail").style.opacity = "1";
-			document.getElementById("tests").innerHTML += "<br><br><strong>Error</strong><br>"+err.stack;			
-		}
-		
-		//Ajustando campos pós testes
-		document.getElementById("roomPassword").value = "";
-		document.getElementById("roomPassword").readonly = "true";
-		document.getElementById("roomText").focus();
-	}
+	<!-- +++++ Welcome Section +++++ -->
+	<div id="ww">
+	    <div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-lg-offset-2">					
+					Paste Zoom Room Text
+					<br>
+					<input type="text" value="" id="roomText" autofocus>
+					<button id="myBtn" onclick="salaZoom()">GO</button>
+					<br>
+					<br>
+					Password is going to be copied to clipboard
+					<br>
+					<input type="text" value="" id="roomPassword" readonly>				
+				</div><!-- /col-lg-8 -->
+			</div><!-- /row -->
+	    </div> <!-- /container -->
+	</div><!-- /ww -->
 	
-	function executaTesteSala(entrada, salaEsperada, senhaEsperada){
-		var saidaSala = converteSalaZoom(entrada);
-		var saidaSenha;
-		if(senhaEsperada) saidaSenha = pasteFromClipboard();
-		
-		if((salaEsperada !== saidaSala) || (senhaEsperada !== saidaSenha)){
-			throw new Error("Falhou no teste<br> Entrada: '"+entrada+"'<br> Sala: '"+saidaSala+"' [Esperado '"+salaEsperada+"']<br> Senha: '"+saidaSenha+"' [Esperado '"+senhaEsperada+"']<br>-----");
-		}		
-	}
-</script>
-
-</head>
-<body>
-<p>Zoom room text</p>
-<input type="text" value="" id="roomText" autofocus>
-<button id="myBtn" onclick="salaZoom()">GO</button>
-<p>Password is going to be copied to clipboard</p>
-<input type="text" value="" id="roomPassword" readonly>
-</p>
-<h2 id="TitleTests">Tests</h2>
-<button id="test" onclick="TestConverteSalaZoom()">Run Tests</button>
-<div id="divFail" class="alert">
-  <span class="closebtn">&times;</span>  
-  <strong>Fail!</strong> Algum teste falhou :/
-</div>
-<div id="divSucesso" class="alert success">
-  <span class="closebtn">&times;</span>  
-  <strong>Success!</strong> Todos os testes passaram.
-</div>
-<span id="tests" style="white-space: pre-line; color:red"></span>
-
-
-<script>
-	//So dar enter depois de colar o texto
-	var input = document.getElementById("roomText");
-	input.addEventListener("keyup", function(event) {
-	  if (event.keyCode === 13) {
-	   event.preventDefault();
-	   document.getElementById("myBtn").click();
-	  }
-	});
+	<div id="divTestes" class="container pt" style="display:none"> <!-- -->
+	<!--<div id="divTestes" class="container pt"> <!-- -->
+		<div class="row mt centered">	
+			<h1>Tests</h1>
+			<button id="test" onclick="TestConverteSalaZoom()">Run Tests</button>
+			<div id="divFail" class="alert">
+			  <span class="closebtn">&times;</span>  
+			  <strong>Fail!</strong> Algum teste falhou :/
+			</div>
+			<div id="divSucesso" class="alert success">
+			  <span class="closebtn">&times;</span>  
+			  <strong>Success!</strong> Todos os testes passaram.
+			</div>
+			<span id="tests" style="white-space: pre-line; color:red"></span>
+		</div><!-- /row -->
+	</div><!-- /container -->
 	
-	//Permitindo fechar os testes
-	var close = document.getElementsByClassName("closebtn");
-	var i;
+	
+	<!-- +++++ Footer Section +++++ -->
+	
+	<div id="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4">
+					<span onclick="document.getElementById('divTestes').style.display='inline'">Tests</span>
+					<!--<h4>My Bunker</h4>
+					<p>
+						Some Address 987,<br/>
+						+34 9054 5455, <br/>
+						Madrid, Spain.
+					</p>
+				</div><!-- /col-lg-4 -->
+				
+				<!--<div class="col-lg-4">
+					<h4>My Links</h4>
+					<p>
+						<a href="#">Dribbble</a><br/>
+						<a href="#">Twitter</a><br/>
+						<a href="#">Facebook</a>
+					</p>
+				</div><!-- /col-lg-4 -->
+				
+				<!--<div class="col-lg-4">
+					<h4>About</h4>
+					<p>Zoom Room URL Generator</p>
+				</div><!-- /col-lg-4 -->
+			
+			</div>
+		
+		</div>
+	</div>
+	
+	<script>
+		//So dar enter depois de colar o texto
+		var input = document.getElementById("roomText");
+		input.addEventListener("keyup", function(event) {
+		  if (event.keyCode === 13) {
+		   event.preventDefault();
+		   document.getElementById("myBtn").click();
+		  }
+		});
+		
+		//Permitindo fechar os testes
+		var close = document.getElementsByClassName("closebtn");
+		var i;
 
-	for (i = 0; i < close.length; i++) {
-	  close[i].onclick = function(){
-		var div = this.parentElement;
-		div.style.opacity = "0";
-		document.getElementById("tests").innerHTML = "";
-	  }
-	}
-</script>
-</body>
+		for (i = 0; i < close.length; i++) {
+		  close[i].onclick = function(){
+			var div = this.parentElement;
+			div.style.opacity = "0";
+			document.getElementById("tests").innerHTML = "";
+		  }
+		}
+	</script>
+  </body>
+</html>
