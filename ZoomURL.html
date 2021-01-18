@@ -56,14 +56,31 @@
 	</style>
 
 	<script type="text/javascript">
-			function salaZoom(){
-				//var StringZoom = window.prompt("Sala do zoom?","");
-				var StringZoom = document.getElementById("roomText").value;
+			//Ainda nao sei porque, a funcao de copiar a senha nao funciona quando executo a funcao direto no onLoad
+			//Verificar se algum parametro de sala foi enviado na URL
+			function salaZoomUrlParameter(){
+				var queryString = window.location.search;				
+				if(queryString){
+					queryString = decodeURI(queryString.substring(1));
+					//salaZoom(queryString);
+					document.getElementById("roomText").value = queryString;
+				}
+			
+			}
+			
+			//Funcao principal
+			function salaZoom(queryString){
+				var StringZoom = queryString;
+				if(!StringZoom){
+					StringZoom = document.getElementById("roomText").value;
+				}
 				
 				url = converteSalaZoom(StringZoom);
 				
-				window.location.replace(url);	
+				window.location.assign(url);
+				//location.href = url; //tem alguma diferenca?
 			}
+			
 			
 			function converteSalaZoom(StringZoom){
 				console.log("String: "+StringZoom);
@@ -105,7 +122,7 @@
 			//Trata o texto para facilitar o reconhecimento no futuro
 			function trataTexto(textoOriginal){
 				//Preparando String
-				textoOriginal = textoOriginal.replace(/;/g, '');
+				textoOriginal = textoOriginal.replace(/;/g, ' ');
 				textoOriginal = textoOriginal.replace(/:/g, ' ');
 				//textoOriginal = textoOriginal.replace(/[^a-zA-Z0-9-_.]/g, '');
 				//Substituindo possiveis variacoes da palavra senha (inclusindo maiusculas ou nao) por uma palavra unica
@@ -256,7 +273,7 @@
 	<script data-ad-client="ca-pub-4603774665706124" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   </head>
 
-  <body>
+  <body onload="salaZoomUrlParameter()">
 
     <!-- Static navbar -->
     <div class="navbar navbar-inverse navbar-static-top">
@@ -264,6 +281,14 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="">RoomUL</a>
         </div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+			  <li><a href="work.html">Work</a></li>
+			  <li><a href="about.html">About</a></li>
+			  <li><a href="blog.html">Blog</a></li>
+			  <li><a href="contact.html">Contact</a></li>
+			</ul>
+      </div>
       </div>
     </div>
 
