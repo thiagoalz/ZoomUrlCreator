@@ -62,6 +62,8 @@
 				if(queryString){
 					queryString = decodeURI(queryString.substring(1));
 					document.getElementById("roomText").value = queryString;
+					
+					//Nao funciona quando mando executar direto
 					//salaZoom(queryString);					
 					//setTimeout(function(){document.getElementById("myBtn").click();}, 5000);					
 				}
@@ -149,20 +151,24 @@
 			
 			//Busca sala de zoom no texto
 			function buscaSala(textoSala){
-				var sala;
-				if(textoSala.indexOf("sala")==-1){//Nao tem o token "sala"				
-					sala = textoSala.split(" ").shift();//Pega o primeiro token
-					//sala = textoSala.substring(textoSala.lastIndexOf(" ") + 1); //Pega o ultimo token - O primeiro token funciona em mais casos
+				var sala="";
+				var arraySala = textoSala.split(" ");
+				if(textoSala.indexOf("sala")==-1){//Nao tem o token "sala"					
+					do {//Resolve o caso quando tem grupos de numero separados por espaco
+					  sala += arraySala.shift();//Pega o primeiro token
+					} while (!isNaN(arraySala[0]));
 				}else{
 					//Pega o primeiro token logo apos o token "sala"				
-					var arraySala = textoSala.split("sala").pop();
+					arraySala = textoSala.split("sala").pop();
 					arraySala = arraySala.split(" ");
 					arraySala = arraySala.filter(item => item); //Remove espacos em branco
-					sala = arraySala.shift();				
+					do {//Resolve o caso quando tem grupos de numero separados por espaco
+					  sala += arraySala.shift();//Pega o primeiro token
+					} while (!isNaN(arraySala[0]));				
 				}
 				
 				return sala;
-			}
+			}	
 			
 			//Busca senha de zoom no texto
 			function buscaSenha(textoSenha){
@@ -244,7 +250,10 @@
 				
 				executaTesteSala("https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09 Password 12351","https://zoom.us/my/umasalaai?pwd=UkZ1N2SjVhejZzOENWMG1MQnRQUT09","12351");
 
-				executaTesteSala("https://zoom.us/my/umasalaai Password 12352","https://zoom.us/my/umasalaai","12352");			
+				executaTesteSala("https://zoom.us/my/umasalaai Password 12352","https://zoom.us/my/umasalaai","12352");
+				
+				executaTesteSala("984 9744 2121 - Senha 12353;","https://zoom.us/j/98497442121","12353");
+				executaTesteSala("Zoom 984 9744 2121 - Senha 12353;","https://zoom.us/j/98497442121","12353");
 				
 				document.getElementById("divSucesso").style.opacity = "1";
 				document.getElementById("tests").innerHTML = "Testes Concluidos :)"
