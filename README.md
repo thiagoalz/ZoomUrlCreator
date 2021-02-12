@@ -3,7 +3,7 @@ Simple webpage that converts crazy strings that co-workers use to send to meetin
 
 # How to use
  * Download and open ZoomURL.html
- * Paste de text containing zoom room and password and rit enter
+ * Paste de text containing zoom room and password and hit enter
  * You are going to be redirected to the correct URL
  * If a passord was found in text, it is going to be copied do clipboard. Just paste it when prompted.
 

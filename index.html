@@ -142,10 +142,19 @@
 			
 			//Busca url pronta no texto
 			function buscaUrl(textoUrl){
-				var url = textoUrl.match(/\bhttps?:\/\/\S+/gi);
-				if(url){
-					url = url[0];
+				var url = false;
+				
+				//Pegar URL obvia
+				var urlM1 = textoUrl.match(/\bhttps?:\/\/\S+/gi);
+				//pegar URL sem http
+				var urlM2 = textoUrl.match(/\bzoom.us\/\S+/gi);
+				
+				if(urlM1){
+					url = urlM1[0];
+				}else if(urlM2){
+					url = "https://"+urlM2[0];
 				}
+				
 				return url;
 			}
 			
@@ -254,6 +263,10 @@
 				
 				executaTesteSala("984 9744 2121 - Senha 12353;","https://zoom.us/j/98497442121","12353");
 				executaTesteSala("Zoom 984 9744 2121 - Senha 12353;","https://zoom.us/j/98497442121","12353");
+				
+				//TODO: Esse nao passa ainda
+				executaTesteSala("zoom.us/j/9999808666 ; ","https://zoom.us/j/9999808666");
+				executaTesteSala("minha sala: zoom.us/my/umasalaai ; ","https://zoom.us/my/umasalaai");
 				
 				document.getElementById("divSucesso").style.opacity = "1";
 				document.getElementById("tests").innerHTML = "Testes Concluidos :)"
