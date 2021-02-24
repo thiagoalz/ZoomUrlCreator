@@ -1,3 +1,4 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/donate?business=HMHG6EJYG5HPW&item_name=RoomUL&currency_code=BRL)
 # ZoomUrlCreator
 Simple webpage that converts crazy strings that co-workers use to send to meetings, into direct zoom URLs.
 
